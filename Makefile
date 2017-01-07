@@ -11,6 +11,9 @@ clean:
 	@echo "begin clean"	
 	@rm bin/* || true
 	@echo "clean success"
+run:
+	@echo "run"
+	@cd ./bin && ./weixin-gate
 
 
 

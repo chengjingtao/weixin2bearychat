@@ -12,7 +12,7 @@ func main() {
 
 }
 func initHandler() {
-	http.HandleFunc("/", valid)
+	http.HandleFunc("/home", valid)
 }
 func startServer() {
 	fmt.Println("server is start...")
@@ -21,6 +21,7 @@ func startServer() {
 }
 
 func valid(rw http.ResponseWriter, request *http.Request) {
+    fmt.Println("get request "+request.URL.RawQuery)
 	err := request.ParseForm()
 	if err != nil {
 		fmt.Println("ParseForm error : " + err.Error())
