@@ -1,4 +1,7 @@
 bin/*
 .vscode
 vendor/*
+vendor/
 !vendor/vendor.json
+.cache
+pkg
