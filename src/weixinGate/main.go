@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -10,6 +11,8 @@ import (
 	"time"
 
 	"encoding/json"
+
+	"os"
 
 	"github.com/codegangsta/cli"
 )
@@ -26,11 +29,11 @@ func main() {
 			Action:    server,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "host,h",
+					Name:  "host,H",
 					Usage: "server bind host to",
 					Value: "0.0.0.0",
 				},
-				cli.UintFlag{
+				cli.IntFlag{
 					Name:  "port,p",
 					Usage: "bind port",
 					Value: 8080,
@@ -42,23 +45,64 @@ func main() {
 			},
 		},
 	}
-
+	err := app.Run(os.Args)
+	if err != nil {
+		fmt.Println("app run eror ", err.Error())
+	}
 }
 
-func server(cli cli.Context) {
+func server(cli *cli.Context) {
 	host := cli.String("host")
-	port := cli.Uint("port")
+	port := cli.Int("port")
 
 	initHandler()
 	startServer(host, port)
 
 }
 func initHandler() {
-	http.HandleFunc("/", valid)
+	http.HandleFunc("/", handlePost)
 }
-func startServer(host string, port uint) {
+func startServer(host string, port int) {
 	fmt.Println("server is start...")
-	http.ListenAndServe(fmt.Sprintf("%s:%v", host, port), nil)
+	err := http.ListenAndServe(fmt.Sprintf("%s:%v", host, port), nil)
+	if err != nil {
+		fmt.Println("error ", err.Error())
+	}
+}
+
+func handlePost(w http.ResponseWriter, req *http.Request) {
+	req.ParseForm()
+	valid(w, req)
+
+	buffer := bytes.NewBuffer(make([]byte, 0, bytes.MinRead))
+	_, err := buffer.ReadFrom(req.Body)
+	if err != nil {
+		fmt.Println("read from body error ", err.Error())
+		return
+	}
+
+	if buffer.Len() == 0 {
+		fmt.Println("receive post body content is empty ")
+		return
+	}
+
+	msg := buffer.String()
+
+	instance, err := parseMsg(msg)
+	if err != nil {
+		fmt.Println("parse msg error ", err.Error())
+		return
+	}
+
+	go func() {
+		fmt.Println("post ", instance.MsgId)
+		err := postToBearyChat("", instance)
+		if err != nil {
+			fmt.Println("postToBearyChat error ", err.Error())
+			return
+		}
+		fmt.Println(instance.MsgId + " √")
+	}()
 }
 
 type weixinMsg struct {
@@ -87,15 +131,21 @@ func parseMsg(msg string) (*weixinMsg, error) {
 
 var client = http.Client{}
 
-func postToBearyChat(url string, instance weixinMsg) {
+func postToBearyChat(url string, instance *weixinMsg) error {
 	buffer := bytes.NewBufferString("")
 	encoder := json.NewEncoder(buffer)
 	err := encoder.Encode(&instance)
 	if err != nil {
-		fmt.Println(err)
+		return errors.New("Encode instance error " + err.Error())
 	}
 
-	client.Post(url, "application/json", buffer)
+	resp, err := client.Post(url, "application/json", buffer)
+	if err != nil {
+		fmt.Println(err.Error())
+		return errors.New("post to beary chat error " + err.Error())
+	}
+	fmt.Println(resp.StatusCode)
+	return nil
 }
 
 func valid(rw http.ResponseWriter, request *http.Request) {
