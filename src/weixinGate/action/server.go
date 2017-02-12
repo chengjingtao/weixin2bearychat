@@ -233,7 +233,7 @@ func validHandler(rw http.ResponseWriter, request *http.Request) {
 
 	var ok = _valid(signature, timestamp, nonce, token)
 	if !ok {
-		log.Info("signature valid fauilure, signature=", signature, " , timestamp="+timestamp, " , nonce="+nonce)
+		log.Info("signature valid fauilure ! signature=", signature, " , timestamp="+timestamp, " , nonce="+nonce)
 		http.Error(rw, "Forbidden", http.StatusForbidden)
 		return
 	}
