@@ -1,15 +1,10 @@
 {
-	"text": "FROM {{.FromUserName}}",
-    "markdown": true,
-    "channel": "bearychat-dev",
-    "attachments": [
-        {
-            "title": "消息",
-			"text": "{{.Content}}",
-            "color": "#ffa500",
-            "images": [
-                {"url": "http://img3.douban.com/icon/ul15067564-30.jpg"}
-            ]
-        }
-    ]
+  "text": "{{.FromUserName}} 说 ",   
+  "markdown": true,
+  "attachments": [
+    {
+      "text": "**{{.Content}}**",
+      "color": "#44b549"
+    }
+  ]
 }
