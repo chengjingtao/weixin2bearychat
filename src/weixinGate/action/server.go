@@ -120,7 +120,12 @@ func msgHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//TODO control queue
-	go postToBearyChat(log, bearychatURL, instance)
+	go func() {
+		err := postToBearyChat(log, bearychatURL, instance)
+		if err != nil {
+			log.Error("post to bearychat error : ", err.Error())
+		}
+	}()
 }
 
 type weixinMsg struct {
@@ -153,32 +158,29 @@ var client = http.Client{
 	Timeout: time.Second * 10,
 }
 
-func postToBearyChat(log *logger.Logger, url string, instance *weixinMsg) {
+func postToBearyChat(log *logger.Logger, url string, instance *weixinMsg) error {
 	log.Info("posting < ", instance.MsgId, " > to bearychat ")
 	buffer := bytes.NewBufferString("")
 	encoder := json.NewEncoder(buffer)
 	err := encoder.Encode(&instance)
 	if err != nil {
-		log.Error("Encode instance error " + err.Error())
-		return
+		return errors.New("Encode instance error " + err.Error())
 	}
 
 	content, err := rebuildMsg(instance)
 	if err != nil {
-		log.Error("rebuildMsg error " + err.Error())
-		return
+		return errors.New("rebuildMsg error " + err.Error())
 	}
 	begin := time.Now()
 	_, err = client.Post(url, "application/json", bytes.NewBufferString(content))
 
 	if err != nil {
-
-		log.Error("post " + instance.MsgId + " to beary chat error :" + err.Error())
+		return errors.New("client post " + instance.MsgId + " error :" + err.Error())
 	}
 
 	log.Info("post < ", instance.MsgId, " >  √ ， using ", time.Now().Sub(begin).String())
 
-	return
+	return nil
 }
 
 var unsupportMsgType = errors.New("msg type unsupport")
