@@ -1,3 +1,4 @@
 FROM debian:jessie
-COPY bin/* /bin/
+COPY /weixin-gate /bin/weixin-gate
+RUN  chmod +x /bin/weixin-gate
 ENTRYPOINT [ "weixin-gate" ]

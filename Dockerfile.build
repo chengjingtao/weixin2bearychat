@@ -4,4 +4,5 @@ RUN set -ex \
     && cd / \
     && git clone https://github.com/linecheng/weixingate.git \
     && cd /weixingate \
-    && make build
+    && make build \
+    && mv /weixingate/bin/weixin-gate /weixin-gate
