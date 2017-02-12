@@ -229,11 +229,11 @@ func validHandler(rw http.ResponseWriter, request *http.Request) {
 	var signature = simpleGetQueryParamter(request, "signature")
 	var timestamp = simpleGetQueryParamter(request, "timestamp")
 	var nonce = simpleGetQueryParamter(request, "nonce")
-	var token = simpleGetQueryParamter(request, "token")
+	var token = "abcchengjt"
 
 	var ok = _valid(signature, timestamp, nonce, token)
 	if !ok {
-		log.Info("signature valid fauilure, got signature=", signature, ",")
+		log.Info("signature valid fauilure, signature=", signature, " , timestamp="+timestamp, " , nonce="+nonce)
 		http.Error(rw, "Forbidden", http.StatusForbidden)
 		return
 	}
