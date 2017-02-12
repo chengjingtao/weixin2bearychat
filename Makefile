@@ -23,12 +23,6 @@ build-image:
 	@echo "begin build images"
 	@sudo docker build -t chengjt/weixin_gate:${TAG} .
 	@echo "build success  chengjt/weixin_gate:${TAG}"
-publish-image:
-	@sudo docker login --username=1016890794@qq.com registry.cn-hangzhou.aliyuncs.com
-	@sudo docker tag chengjt/weixin_gate:${TAG} registry.cn-hangzhou.aliyuncs.com/chengjt/weixin_gate:${TAG}
-	@sudo docker push registry.cn-hangzhou.aliyuncs.com/chengjt/weixin_gate:${TAG}
-	@sudo docker tag chengjt/weixin_gate:${TAG} registry.cn-hangzhou.aliyuncs.com/chengjt/weixin_gate:latest
-	@sudo docker push registry.cn-hangzhou.aliyuncs.com/chengjt/weixin_gate:latest
 
 push2registry: build build-image _push2registry
 _push2registry:

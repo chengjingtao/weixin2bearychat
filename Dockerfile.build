@@ -1,0 +1,7 @@
+FROM helderfarias/go
+RUN go get -u -v github.com/kardianos/govendor
+RUN set -ex \
+    && cd / \
+    && git clone https://github.com/linecheng/weixingate.git \
+    && cd /weixingate \
+    && make build
