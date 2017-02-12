@@ -1,6 +1,7 @@
 PREFIX=$(shell pwd)
 COMMIT=$(shell git rev-parse --short HEAD)
 DATE=$(shell date +%m%d%H%M)
+BUILDDATE=$(shell date +%Y%m%d%H%M)
 export GOPATH=${PREFIX}
 TAG=${COMMIT}-${DATE}
 
@@ -8,7 +9,7 @@ default: build
 build:
 	@echo "begin to build"
 	@cd ./src/weixinGate && govendor sync -v
-	@go build -v -ldflags '-extldflags "-static"'  -o ${PREFIX}/bin/weixin-gate ./src/weixinGate
+	@go build -v -ldflags '-X main.version=${COMMIT} -X main.buildDate=${BUILDDATE} -extldflags "-static"'  -o ${PREFIX}/bin/weixin-gate ./src/weixinGate
 	@echo "build success"
 clean:
 	@echo "begin clean"	

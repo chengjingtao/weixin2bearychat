@@ -6,7 +6,14 @@ import (
 
 	"weixinGate/logger"
 
+	"fmt"
+
 	"github.com/codegangsta/cli"
+)
+
+var (
+	version   = "unknown"
+	buildDate = ""
 )
 
 var log = logger.New()
@@ -15,6 +22,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "weixin gate"
 	app.Author = "chengjt"
+	app.Version = fmt.Sprintf("%s (%s)", version, buildDate)
 	app.Commands = []cli.Command{
 		cli.Command{
 			Name:      "server",
@@ -39,6 +47,7 @@ func main() {
 			},
 		},
 	}
+	fmt.Println("Version is " + version + ", Build Date is " + buildDate)
 	err := app.Run(os.Args)
 	if err != nil {
 		log.Error("app run eror ", err.Error())
