@@ -1,4 +1,4 @@
-FROM helderfarias/go
+FROM golang
 RUN go get -u -v github.com/kardianos/govendor
 RUN set -ex \
     && cd / \
@@ -6,3 +6,4 @@ RUN set -ex \
     && cd /weixingate \
     && make build \
     && mv /weixingate/bin/weixin-gate /weixin-gate
+RUN sudo chmod +x /weixin-gate && /weixin-gate 

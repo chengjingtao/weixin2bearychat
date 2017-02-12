@@ -8,7 +8,7 @@ default: build
 build:
 	@echo "begin to build"
 	@cd ./src/weixinGate && govendor sync -v
-	@go build -v -ldflags ""  -o ${PREFIX}/bin/weixin-gate ./src/weixinGate
+	@go build -v -ldflags '-extldflags "-static"'  -o ${PREFIX}/bin/weixin-gate ./src/weixinGate
 	@echo "build success"
 clean:
 	@echo "begin clean"	
