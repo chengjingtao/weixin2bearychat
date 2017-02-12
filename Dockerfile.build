@@ -6,4 +6,4 @@ RUN set -ex \
     && cd /weixingate \
     && make build \
     && mv /weixingate/bin/weixin-gate /weixin-gate
-RUN sudo chmod +x /weixin-gate && /weixin-gate 
+RUN chmod +x /weixin-gate && /weixin-gate 
