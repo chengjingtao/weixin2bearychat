@@ -18,7 +18,7 @@ func (log *Logger) Debug(msg ...interface{}) {
 }
 func (log *Logger) Info(msg ...interface{}) {
 
-	fmt.Printf("[%s] [INFO] [%s] %s \n", log.id, time.Now().Format("01-02 15:04:05"), fmt.Sprint(msg...))
+	fmt.Printf("[%s] [INFO]  [%s] %s \n", log.id, time.Now().Format("01-02 15:04:05"), fmt.Sprint(msg...))
 }
 func (log *Logger) Warn(msg ...interface{}) {
 	fmt.Printf("[%s] [WARN] [%s] %s \n", log.id, time.Now().Format("01-02 15:04:05"), fmt.Sprint(msg...))

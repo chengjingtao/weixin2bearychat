@@ -10,6 +10,7 @@ build:
 	@echo "begin to build"
 	@cd ./src/weixinGate && govendor sync -v
 	@go build -v -ldflags '-X main.version=${COMMIT} -X main.buildDate=${BUILDDATE} -extldflags "-static"'  -o ${PREFIX}/bin/weixin-gate ./src/weixinGate
+	@cp -r ./src/weixinGate/tmpl ./bin
 	@echo "build success"
 clean:
 	@echo "begin clean"	

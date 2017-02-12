@@ -28,6 +28,7 @@ import (
 var (
 	host         = "NA"
 	port         = 0
+	tmplpath     = "NA"
 	bearychatURL = ""
 )
 
@@ -36,8 +37,10 @@ func Serve(cli *cli.Context) {
 }
 
 func serve(cli *cli.Context) {
-	host := cli.String("host")
-	port := cli.Int("port")
+	host = cli.String("host")
+	port = cli.Int("port")
+	tmplpath = cli.String("tmplpath")
+
 	bearychatURL = cli.String("target")
 
 	addRoute("/", "GET", validHandler)
@@ -150,30 +153,32 @@ var client = http.Client{
 	Timeout: time.Second * 10,
 }
 
-func postToBearyChat(log *logger.Logger, url string, instance *weixinMsg) error {
-	log.Info("post < ", instance.MsgId, " > to bearychat ")
+func postToBearyChat(log *logger.Logger, url string, instance *weixinMsg) {
+	log.Info("posting < ", instance.MsgId, " > to bearychat ")
 	buffer := bytes.NewBufferString("")
 	encoder := json.NewEncoder(buffer)
 	err := encoder.Encode(&instance)
 	if err != nil {
-		return errors.New("Encode instance error " + err.Error())
+		log.Error("Encode instance error " + err.Error())
+		return
 	}
 
 	content, err := rebuildMsg(instance)
 	if err != nil {
-		return errors.New("rebuildMsg error " + err.Error())
+		log.Error("rebuildMsg error " + err.Error())
+		return
 	}
 	begin := time.Now()
 	_, err = client.Post(url, "application/json", bytes.NewBufferString(content))
 
 	if err != nil {
-		fmt.Println(err.Error())
-		return errors.New("post " + instance.MsgId + " to beary chat error :" + err.Error())
+
+		log.Error("post " + instance.MsgId + " to beary chat error :" + err.Error())
 	}
 
 	log.Info("post < ", instance.MsgId, " >  √ ， using ", time.Now().Sub(begin).String())
 
-	return nil
+	return
 }
 
 var unsupportMsgType = errors.New("msg type unsupport")
@@ -183,12 +188,12 @@ func rebuildMsg(msgInstance *weixinMsg) (string, error) {
 		return "", unsupportMsgType
 	}
 
-	bts, err := ioutil.ReadFile("./tmpl/" + msgInstance.MsgType)
+	bts, err := ioutil.ReadFile(tmplpath + msgInstance.MsgType)
 	if os.IsNotExist(err) {
-		return "", errors.New("./tmpl/" + msgInstance.MsgType + " 模板文件不存在")
+		return "", errors.New(tmplpath + msgInstance.MsgType + " 模板文件不存在")
 	}
 	if err != nil {
-		return "", errors.New("读取 " + "./tmpl/" + msgInstance.MsgType + " 文件出现错误 " + err.Error())
+		return "", errors.New("读取 " + tmplpath + msgInstance.MsgType + " 文件出现错误 " + err.Error())
 	}
 	content := string(bts)
 	t, err := template.New(msgInstance.MsgType).Parse(content)

@@ -41,6 +41,11 @@ func main() {
 					Value: 8080,
 				},
 				cli.StringFlag{
+					Name:  "tmplpath,t",
+					Usage: "msg template path",
+					Value: "/etc/weixin-gate/tmpl/",
+				},
+				cli.StringFlag{
 					Name:  "target,t",
 					Usage: "which url that post msg to",
 				},

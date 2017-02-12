@@ -5,4 +5,6 @@ RUN set -ex \
     && git clone https://github.com/linecheng/weixingate.git \
     && cd /weixingate \
     && make build \
-    && mv /weixingate/bin/weixin-gate /weixin-gate
+    && mv /weixingate/bin/weixin-gate /weixin-gate \
+    && mkdir -p /etc/weixin-gate/tmpl \
+    && mv /weixingate/bin/tmpl /etc/weixin-gate/tmpl
