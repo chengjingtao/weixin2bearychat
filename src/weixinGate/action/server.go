@@ -186,9 +186,6 @@ func postToBearyChat(log *logger.Logger, url string, instance *weixinMsg) error 
 var unsupportMsgType = errors.New("msg type unsupport")
 
 func rebuildMsg(msgInstance *weixinMsg) (string, error) {
-	if msgInstance.MsgType != "text" {
-		return "", unsupportMsgType
-	}
 
 	bts, err := ioutil.ReadFile(tmplpath + msgInstance.MsgType)
 	if os.IsNotExist(err) {
