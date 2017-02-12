@@ -1,0 +1,10 @@
+{
+  "text": "{{.FromUserName}} 说 ",   
+  "markdown": true,
+  "attachments": [
+    {
+	  "images": [{"url":"{{.PicUrl}}"}],
+      "color": "#44b549"
+    }
+  ]
+}
