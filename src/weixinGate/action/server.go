@@ -256,3 +256,37 @@ func validHandler(rw http.ResponseWriter, request *http.Request) {
 
 	log.Debug("get echostr : "+echostr, ", valid response over")
 }
+
+var (
+	weixinAPPID     = "wxb0a748e41e85cff6"
+	weixinAppSecret = "51f6835173bd24f8914b09d63657b096"
+)
+
+func getWeixinUsername(openID string) (string, error) {
+	var url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN"
+	// client.Get()
+	return "", nil
+}
+
+func getAccessToken(appSecret string) (string, error) {
+	var url = fmt.Sprintf("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", weixinAPPID, weixinAppSecret)
+	resp, err := client.Get(url)
+	if err != nil {
+		return "", errors.New("client get access_token error " + err.Error())
+	}
+	buffer := bytes.NewBuffer(make([]byte, 0, bytes.MinRead))
+	_, err = buffer.ReadFrom(resp.Body)
+	if err != nil {
+		return "", errors.New("read from body error " + err.Error())
+	}
+	var tokenResp interface{}
+	err = json.NewDecoder(resp.Body).Decode(tokenResp)
+	if err != nil {
+		return errors.New("decode error " + err.Error())
+	}
+	if ok, _ := tokenResp["errcode"]; ok {
+		return errors.New("client get access token error " + tokenResp["errmsg"])
+	}
+
+	return tokenResp["access_token"], nil
+}
