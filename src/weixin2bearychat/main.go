@@ -2,9 +2,9 @@ package main
 
 import (
 	"os"
-	"weixinGate/action"
+	"weixin2bearychat/action"
 
-	"weixinGate/logger"
+	"weixin2bearychat/logger"
 
 	"fmt"
 
@@ -20,14 +20,14 @@ var log = logger.New()
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "weixin gate"
+	app.Name = "weixin2bearychat"
 	app.Author = "chengjt"
 	app.Version = fmt.Sprintf("%s (%s)", version, buildDate)
 	app.Commands = []cli.Command{
 		cli.Command{
 			Name:      "server",
 			ShortName: "server",
-			Usage:     "start weixin gate server",
+			Usage:     "start weixin to bearychat server",
 			Action:    action.Serve,
 			Flags: []cli.Flag{
 				cli.StringFlag{
@@ -38,12 +38,12 @@ func main() {
 				cli.IntFlag{
 					Name:  "port,p",
 					Usage: "bind port",
-					Value: 8080,
+					Value: 80,
 				},
 				cli.StringFlag{
 					Name:  "tmplpath",
 					Usage: "msg template path",
-					Value: "/etc/weixin-gate/tmpl/",
+					Value: "/etc/weixin2bearychat/tmpl/",
 				},
 				cli.StringFlag{
 					Name:  "target,t",

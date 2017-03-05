@@ -2,9 +2,9 @@ FROM golang
 RUN go get -u -v github.com/kardianos/govendor
 RUN set -ex \
     && cd / \
-    && git clone https://github.com/linecheng/weixingate.git \
-    && cd /weixingate \
+    && git clone https://github.com/linecheng/weixin2bearychat.git \
+    && cd /weixin2bearychat \
     && make build \
-    && mv /weixingate/bin/weixin-gate /weixin-gate \
-    && mkdir -p /etc/weixin-gate/tmpl \
-    && mv /weixingate/bin/tmpl /etc/weixin-gate/tmpl
+    && mv /weixin2bearychat/bin/weixin2bearychat /weixin2bearychat \
+    && mkdir -p /etc/weixin2bearychat/tmpl \
+    && mv /weixin2bearychat/bin/tmpl /etc/weixin2bearychat/tmpl
