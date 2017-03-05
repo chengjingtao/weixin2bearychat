@@ -11,8 +11,8 @@
 ## 编译
 
 环境  
-- go  > v1.6.3  
-- govendor  > v1.0.8  
+- go  >= v1.6.3  
+- govendor  >= v1.0.8  
 
 ```
 make build
