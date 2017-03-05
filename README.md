@@ -7,8 +7,19 @@
 - 图片类型消息
 
 # 使用
-## 参数说明
 
+## 编译
+
+环境  
+- go  > v1.6.3  
+- govendor  > v1.0.8  
+
+```
+make build
+```
+
+## 参数说明
+编译生成的文件位于./bin 目录  执行 `./weixin2bearychat server --help`
 ```
 NAME:
    weixin2bearychat server - start weixin gate server
@@ -38,7 +49,3 @@ cd ./bin
 ## 绑定微信公众号
 打开微信公众号配置，将转发服务监听的ip地址 例如 http://x.x.x.x 配置公众号server地址，并启用。
 
-# 开发
-go  > v1.6.3  
-govendor  > v1.0.8  
-编译 `make build`
